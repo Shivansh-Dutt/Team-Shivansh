@@ -3,7 +3,10 @@ import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
 
+// Function to Register on app
+
 export const register = async (req, res) => {
+  // Destructure from body
   const { name, email, password, role, skills, location } = req.body;
 
   try {
@@ -96,28 +99,51 @@ export const login = async (req, res) => {
   }
 };
 
+// function to logout a user
+
+export const logout = async (req,res) =>{ 
+  try {
+    return res.cookie("token","",{maxAge:0}).json({
+      message:'Logged out successfully',
+      success:true
+  });
+  } catch (error) {
+    return res.status(500).json({
+      message:"Server Error",
+      success:true
+    })
+  }
+}
+
+// function to get user profile
+
 export const getProfile = async (req, res) => {
   try {
+    let userID = req.params.id;
 
-    const user = await User.findById(req.id).select("-password");
+    const user = await User.findById(userID).select("-password");
     if (!user) {
       return res.status(404).json({ message: "User not found" });
     }
-
     res.status(200).json(user);
   } catch (error) {
-    console.log(error)
-    res
-      .status(500)
-      .json({ message: "Error fetching profile", error: error.message });
+    console.log(error);
+    res.status(500).json({
+      message: "Error fetching profile",
+      error: error.message,
+    });
   }
 };
+
+// function to update profile
 
 export const updateProfile = async (req, res) => {
   const { name, location, skills } = req.body;
 
   try {
-    const user = await User.findById(req.id);
+    let userID = req.id
+
+    const user = await User.findById(userID);
 
     if (!user) {
       return res.status(404).json({ message: "User not found" });
@@ -133,5 +159,51 @@ export const updateProfile = async (req, res) => {
     res
       .status(500)
       .json({ message: "Error updating profile", error: error.message });
+  }
+};
+
+
+//  function to change password
+
+export const changePassword = async (req, res) => {
+  const { oldPassword, newPassword } = req.body;
+
+  try {
+    if(!oldPassword || !newPassword){
+      return res.status(401).json({message : "enter password "})
+    }
+
+    const user = await User.findById(req.id);
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    // Verify old password
+    const isMatch = await bcrypt.compare(oldPassword, user.password);
+    if (!isMatch) {
+      return res.status(400).json({ message: "Old password is incorrect" });
+    }
+
+    // Hash and update the new password
+    user.password = await bcrypt.hash(newPassword, 10);
+    await user.save();
+
+    res.status(200).json({ message: "Password changed successfully" });
+  } catch (error) {
+    res.status(500).json({ message: "Error changing password", error: error.message });
+  }
+};
+
+// function to delete user
+
+export const deleteUser = async (req, res) => {
+  try {
+    const user = await User.findByIdAndDelete(req.params.id);
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+    res.status(200).json({ message: "User deleted successfully" });
+  } catch (error) {
+    res.status(500).json({ message: "Error deleting user", error: error.message });
   }
 };
