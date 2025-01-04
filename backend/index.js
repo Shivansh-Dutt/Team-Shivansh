@@ -1,5 +1,6 @@
 import express from "express"
 import userRoutes from "./routes/user.route.js";
+import needRoutes from "./routes/need.route.js";
 import ConnectDB from "./utils/db.js";
 import cookieParser from 'cookie-parser';
 
@@ -14,6 +15,7 @@ ConnectDB();
 
 // Middleware for routes
 app.use("/api/v1/user", userRoutes);
+app.use("/api/v1/need",needRoutes)
 
 // Port and Server
 const PORT = 8000
