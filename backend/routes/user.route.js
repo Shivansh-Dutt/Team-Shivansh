@@ -7,7 +7,7 @@ const router = express.Router()
 router.post("/register", register);
 router.post("/login", login);
 router.get("/logout",logout);
-router.get("/delete",deleteUser)
+router.delete("/delete",isAuthentiacted,deleteUser)
 router.get("/:id/getProfile",isAuthentiacted,getProfile)
 router.post("/profile/update",isAuthentiacted,updateProfile)
 router.post("/changePassword",isAuthentiacted,changePassword)

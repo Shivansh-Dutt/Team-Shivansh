@@ -6,41 +6,62 @@ import dotenv from "dotenv";
 // Function to Register on app
 
 export const register = async (req, res) => {
-  // Destructure from body
   const { name, email, password, role, skills, location } = req.body;
 
   try {
-    if (!name || !email || !password || !role) {
-      return res.status(401).json({ message: "Fill all data" });
+    // Validate role
+    if (role && !["user", "volunteer"].includes(role)) {
+      return res.status(400).json({
+        success: false,
+        message: "Invalid role. Role must be 'user' or 'volunteer'.",
+      });
     }
 
-    // Check if user already exists
+    // Check if the email is already registered
     const existingUser = await User.findOne({ email });
     if (existingUser) {
-      return res.status(400).json({ message: "User already exists" });
+      return res.status(400).json({
+        success: false,
+        message: "Email is already registered.",
+      });
     }
 
-    // Hash the password
+    // Password hashing
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    // Save user to DB
-    const user = new User({
+    // Create new user
+    const newUser = new User({
       name,
       email,
       password: hashedPassword,
-      role,
-      skills,
-      location,
+      role: role || "user", // Default to "user" if no role is specified
+      skills: role === "volunteer" ? skills : [], // Only for volunteers
+      location: role === "volunteer" ? location : undefined, // Only for volunteers
     });
 
-    await user.save();
-    res.status(201).json({ message: "User registered successfully", user });
+    await newUser.save();
+
+    res.status(201).json({
+      success: true,
+      message: `${role === "volunteer" ? "Volunteer" : "User"} registered successfully.`,
+      data: {
+        id: newUser._id,
+        name: newUser.name,
+        email: newUser.email,
+        role: newUser.role,
+        skills: newUser.skills,
+        location: newUser.location,
+      },
+    });
   } catch (error) {
-    res
-      .status(500)
-      .json({ message: "Error registering user", error: error.message });
+    res.status(500).json({
+      success: false,
+      message: "Error registering user.",
+      error: error.message,
+    });
   }
 };
+
 
 // function to login a user
 
@@ -198,7 +219,7 @@ export const changePassword = async (req, res) => {
 
 export const deleteUser = async (req, res) => {
   try {
-    const user = await User.findByIdAndDelete(req.params.id);
+    const user = await User.findByIdAndDelete(req.id);
     if (!user) {
       return res.status(404).json({ message: "User not found" });
     }
