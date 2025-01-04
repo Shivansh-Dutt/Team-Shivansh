@@ -4,48 +4,52 @@ const NeedSchema = new mongoose.Schema({
   title: {
     type: String,
     required: true,
+    trim: true, // Removes extra whitespace
   },
   description: {
     type: String,
     required: true,
+    trim: true,
   },
   category: {
     type: String,
-    enum: ["food", "medical", "education", "repair", "other"],
     required: true,
+    enum: ["food", "clothing", "shelter", "blood donation", "education", "other"],
+    default: "other",
   },
   location: {
-    type: {
-      latitude: {
-        type: Number,
-        required: true,
-      },
-      longitude: {
-        type: Number,
-        required: true,
-      },
-    },
-    required: true,
-  },
-  urgency: {
     type: String,
-    enum: ["low", "medium", "high"],
-    default: "medium",
+    required: true, // Could be a city, address, or geographic region
   },
   reportedBy: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: "User",
+    ref: "User", // Refers to the User who created this need
     required: true,
   },
   status: {
     type: String,
-    enum: ["open", "in-progress", "fulfilled"],
-    default: "open",
+    enum: ["open", "in progress", "fulfilled"],
+    default: "open", // Tracks the lifecycle of the need
   },
+  fullfilledBy: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User", // Volunteers working on this need
+    },
+  ],
   createdAt: {
     type: Date,
-    default: Date.now,
+    default: Date.now, // Automatically set when the need is created
   },
+  updatedAt: {
+    type: Date,
+    default: Date.now, // Automatically updated
+  },
+});
+
+NeedSchema.pre("save", function (next) {
+  this.updatedAt = Date.now();
+  next();
 });
 
 const Need = mongoose.model("Need", NeedSchema);
