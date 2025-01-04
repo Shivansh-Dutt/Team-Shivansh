@@ -14,7 +14,7 @@ const NeedSchema = new mongoose.Schema({
   category: {
     type: String,
     required: true,
-    enum: ["food", "clothing", "shelter", "blood donation", "education", "other"],
+    enum: ["food", "clothing", "shelter", "medical", "education", "other"],
     default: "other",
   },
   location: {
@@ -31,7 +31,7 @@ const NeedSchema = new mongoose.Schema({
     enum: ["open", "in progress", "fulfilled"],
     default: "open", // Tracks the lifecycle of the need
   },
-  fullfilledBy: [
+  fulfilledBy: [
     {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User", // Volunteers working on this need

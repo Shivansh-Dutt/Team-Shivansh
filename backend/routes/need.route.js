@@ -1,5 +1,5 @@
 import express from "express";
-import { createNeed, getAllNeeds, getNeedById, updateNeed ,fulfillNeed} from "../controllers/need.controllers.js";
+import { createNeed, getAllNeeds, getNeedById, updateNeed ,fulfillNeed, deleteNeed} from "../controllers/need.controllers.js";
 import isAuthenticated from "../middlewares/isAuthenticated.js";
 
 const router = express.Router();
@@ -19,5 +19,9 @@ router.post("/needs/:id",isAuthenticated,updateNeed)
 
 // Fulfill a need
 router.patch("/needs/:id/fulfill", isAuthenticated, fulfillNeed);
+
+// Delete a need
+
+router.delete("/:id/delete",isAuthenticated,deleteNeed)
 
 export default router;

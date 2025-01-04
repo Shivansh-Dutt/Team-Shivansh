@@ -1,4 +1,5 @@
 import Need from "../models/need.model.js";
+import User from "../models/user.model.js"
 
 // Create a new need
 export const createNeed = async (req, res) => {
@@ -132,7 +133,7 @@ export const fulfillNeed = async (req, res) => {
 
     // Fetch the need by ID
     const need = await Need.findById(id);
-
+    
     if (!need) {
       return res.status(404).json({ message: "Need not found" });
     }
@@ -142,13 +143,13 @@ export const fulfillNeed = async (req, res) => {
       return res.status(400).json({ message: "This need has already been fulfilled" });
     }
 
-    // Mark the need as fulfilled
-    need.fulfilledBy = userId;
+    // Add the userId to the fulfilledBy array
+    need.fulfilledBy.push(userId);  // Correct method to push into an array
     need.status = "fulfilled";
 
     await need.save();
 
-    // Optionally populate the `fulfilledBy` field with volunteer details
+    // // Optionally populate the `fulfilledBy` field with volunteer details
     const populatedNeed = await Need.findById(id)
       .populate("reportedBy", "name email")
       .populate("fulfilledBy", "name email");
