@@ -1,4 +1,4 @@
-# Community Needs Map
+# “Reach out: A Map for Community Care”
 
 A web application built to bridge the gap between community needs and volunteers willing to help. The app maps out areas where help is needed and enables volunteers to contribute efficiently. This project aligns with the theme of "Tech for Social Good."
 
