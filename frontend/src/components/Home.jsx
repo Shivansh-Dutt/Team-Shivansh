@@ -27,7 +27,7 @@ const LandingPage = () => {
       {/* Navbar */}
       <nav className="flex justify-between items-center px-8 py-4 bg-white shadow-md">
         <h1 className="text-2xl font-bold text-gray-800">
-          Community Needs Map
+          Reach out: A Map for Community Care
         </h1>
         <div className="space-x-4">
           <Link

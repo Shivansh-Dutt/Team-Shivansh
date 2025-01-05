@@ -9,8 +9,7 @@ const ProtectedRoute = () => {
 
   // Get author (user data) from Redux store
   const author = useSelector((state) => state.author.user);
-  console.log(author)
-
+  
   useEffect(() => {
     // Check if author (user) exists in Redux store
     if (!author) {

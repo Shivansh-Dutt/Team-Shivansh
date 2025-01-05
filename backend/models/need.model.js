@@ -31,6 +31,11 @@ const NeedSchema = new mongoose.Schema({
     enum: ["open", "in progress", "fulfilled"],
     default: "open", // Tracks the lifecycle of the need
   },
+  urgency:{
+    type: String,
+    enum: ["low", "medium", "high"],
+    default: "medium", // Tracks the lifecycle of the need
+  },
   fulfilledBy: [
     {
       type: mongoose.Schema.Types.ObjectId,
