@@ -1,16 +1,33 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+import { useDispatch, useSelector } from "react-redux";
 import { toast } from "sonner";
+import { useNavigate } from "react-router-dom";
 
 const ProfilePage = () => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
+  const authUser = useSelector((state) => state.author.user);
+
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+
+  console.log(authUser);
+
+  // Redirect to login if authUser is null
+  useEffect(() => {
+    if (!authUser) {
+      navigate("/login");
+    } else {
+      fetchUserProfile();
+    }
+  }, [authUser, navigate]);
 
   const fetchUserProfile = async () => {
     try {
       setLoading(true);
       const response = await axios.get(
-        "http://localhost:8000/api/v1/user/profile",
+        `http://localhost:8000/api/v1/user/${authUser._id}/getProfile`,  // Update this line
         {
           withCredentials: true,
         }
@@ -21,11 +38,7 @@ const ProfilePage = () => {
     } finally {
       setLoading(false);
     }
-  };
-
-  useEffect(() => {
-    fetchUserProfile();
-  }, []);
+  };  
 
   if (loading) {
     return (

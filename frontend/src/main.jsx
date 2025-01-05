@@ -1,12 +1,23 @@
-import { StrictMode } from 'react'
-import { createRoot } from 'react-dom/client'
-import './index.css' // Import the CSS file that contains Tailwin
-import App from './App.jsx'
-import {Toaster} from 'sonner'
+import { StrictMode } from "react";
+import { createRoot } from "react-dom/client";
+import "./index.css";
+import App from "./App.jsx";
+import { Provider } from "react-redux";
+import { Toaster } from "sonner";
+import store from "./redux/store";
+import { PersistGate } from "redux-persist/integration/react";
+import {persistStore} from "redux-persist";
+import React from "react";
 
-createRoot(document.getElementById('root')).render(
+let persisitor = persistStore(store)
+
+createRoot(document.getElementById("root")).render(
   <StrictMode>
-    <App />
-    <Toaster/>
-  </StrictMode>,
-)
+    <Provider store={store}>
+      <PersistGate loading={null} persistor={persisitor}>
+        <App />
+        <Toaster />
+      </PersistGate>
+    </Provider>
+  </StrictMode>
+);

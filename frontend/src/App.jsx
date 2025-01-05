@@ -6,22 +6,9 @@ import Dashboard from "./components/Dashboard";
 import CreateNeedPage from "./components/createNeedForm";
 import NeedListPage from "./components/Needdetails";
 import ProfilePage from "./components/Profile";
+import ProtectedRoute from "./components/ProtectedRoute"
 
 const BrowserRouter = createBrowserRouter([
-  // {
-  //   path:"/",
-  //   // element:<MainLayout/>,
-  //   children:[
-  //     {
-  //       path:'/profile/:id',
-  //       element:<Profile/>
-  //     },
-  //     {
-  //       path: '/account/edit',
-  //       element:<EditProfile/>
-  //     }
-  //   ]
-  // },
   {
     path: "/",
     element: <Home />,
@@ -35,21 +22,45 @@ const BrowserRouter = createBrowserRouter([
     element: <Signup />,
   },
   {
-    path:"/dashboard",
-    element:<Dashboard/>
+    path: '/dashboard',
+    element: <ProtectedRoute />, // Protected Route
+    children: [
+      {
+        path: '',
+        element: <Dashboard />,
+      },
+    ],
   },
   {
-    path:"/createNeed",
-    element:<CreateNeedPage/>
+    path: '/createNeed',
+    element: <ProtectedRoute />, // Protected Route
+    children: [
+      {
+        path: '',
+        element: <CreateNeedPage />,
+      },
+    ],
   },
   {
-    path:"/Needs",
-    element:<NeedListPage/>
+    path: '/Needs',
+    element: <ProtectedRoute />, // Protected Route
+    children: [
+      {
+        path: '',
+        element: <NeedListPage />,
+      },
+    ],
   },
   {
-    path:"/profile",
-    element:<ProfilePage/>
-  }
+    path: '/profile',
+    element: <ProtectedRoute />, // Protected Route
+    children: [
+      {
+        path: '',
+        element: <ProfilePage />,
+      },
+    ],
+  },
 ]);
 
 function App() {

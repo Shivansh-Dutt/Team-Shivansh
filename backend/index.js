@@ -1,4 +1,5 @@
-import express from "express"
+import express , {urlencoded} from "express"
+import cors from 'cors';
 import userRoutes from "./routes/user.route.js";
 import needRoutes from "./routes/need.route.js";
 import volunteerRoutes from "./routes/volunteer.route.js"
@@ -13,6 +14,13 @@ app.use(cookieParser())
 
 // Connect to MongoDB
 ConnectDB();
+
+app.use(urlencoded({extended:true}));
+const corsOptions = {
+    origin : 'http://localhost:5173',
+    credentials : true
+}
+app.use(cors(corsOptions))
 
 // Middleware for routes
 app.use("/api/v1/user", userRoutes);

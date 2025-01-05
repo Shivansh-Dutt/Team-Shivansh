@@ -31,7 +31,7 @@ const Dashboard = () => {
           <ul className="space-y-4">
             <li>
               <Link
-                to="/create-need"
+                to="/createNeed"
                 className="block text-blue-700 font-medium hover:underline"
               >
                 Create Need

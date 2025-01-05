@@ -104,10 +104,12 @@ const CreateNeedPage = () => {
             required
           >
             <option value="">Select Category</option>
-            <option value="Healthcare">Healthcare</option>
-            <option value="Education">Education</option>
-            <option value="Food and Shelter">Food and Shelter</option>
-            <option value="Community Support">Community Support</option>
+            <option value="food">Food</option>
+            <option value="clothing">Clothing</option>
+            <option value="shelter">Shelter</option>
+            <option value="medical">Healthcare</option>
+            <option value="education">Education</option>
+            <option value="other">Others</option>
           </select>
         </div>
         <div className="mb-4">
